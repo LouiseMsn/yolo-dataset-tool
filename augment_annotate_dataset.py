@@ -2,15 +2,13 @@ import numpy as np
 from PIL import Image, ImageEnhance
 import sys
 import os
-from datetime import datetime
 import random
 import shutil
-import time
 import cv2
 import argparse
 
 # Filepath inclusion of SAM
-sys.path.append('lang_sam')
+sys.path.append('/third-party/lang-segment-anything/lang_sam')
 from lang_sam import LangSAM
 from lang_sam.utils import draw_image
 
