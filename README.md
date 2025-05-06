@@ -72,8 +72,10 @@ yolo train data=</global/path/to/the/data.yaml> model=<model.pt>
 The results will be given in the /runs/detect/trainN/ folder, N being the training run's number.
 
 ### Yolo prediction
-Test your training by running a prediction on the yolo_dataset/images/test folder:  
+Test your training by running a prediction on the yolo_dataset/images/test folder: 
+
 ```bash
 yolo predict model=</global/path/to/best.pt> source=<number of webcam or /path/to/dir> imgsz=<image_size>
 # the best.pt file can be found under /runs/detect/trainN/weights/best.pt
 ```
+You can then use this best.pt in your code.
