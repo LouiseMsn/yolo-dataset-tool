@@ -26,14 +26,13 @@ The images given in input are not modified nor moved.
 git clone git@github.com:LouiseMsn/yolo-dataset-creation-tool.git
 cd yolo-dataset-creation-tool
 
-# 2. Clone the dependencies
-mkdir third-party && cd third-party
-git clone git@github.com:luca-medeiros/lang-segment-anything.git
-cd ..
-
-# 3. Create the conda environment
-conda env create -f environment.yml 
+# 2. Create the conda environment
+conda env create -n yolo-dataset python=3.12 -y
 conda activate yolo-dataset
+
+# 3.Install packages
+pip install torch==2.4.1 torchvision==0.19.1 --extra-index-url https://download.pytorch.org/whl/cu124
+pip install -U git+https://github.com/luca-medeiros/lang-segment-anything.git
 ```
  
 ## Usage
@@ -42,8 +41,9 @@ Run
 ```bash
 python augment_annotate_dataset.py -f <path/to/your/images> -a
 ```
-Remove `-a` if you'd like to annotate the images yourself.
-
+Options:
+`-a` : auto-annotation of the images using lang_sam, remove it if you'd like to annotate the images yourself.
+`-f` : [mandatory] folder where the input images are located
 ### Yolo training
 In the terminal of your choice run :
 ```bash
