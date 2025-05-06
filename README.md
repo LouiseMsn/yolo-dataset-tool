@@ -47,28 +47,33 @@ Options:
 `-f` : [mandatory] folder where the input images are located.
 
 ## Correct annotations
-It is very common for some annotations to be wrong so the dataset needs to be slightly corrected.  
+It is very common for some annotations to be wrong so the dataset needs to be partially corrected.  
 The output dataset is formated to be corrected with [LabelImg](https://github.com/cloudy-sfu/labelimg).  
 
 1. Install labelImg using the instruction in the repo, the pypi version kept crashing on my computer so used the build from source method.
 2. Launch the programm using `python3 labelImg.py`
 3. In LabelImg Click on `Open Dir` (CTRL+U) and open the /yolo-dataset/images/train or yolo-dataset/images/val directories depending on which one you want to correct.
-4. Click on `Change Save Dir` (CTRL+R) and select the label directory matching the images
+4. Click on `Change Save Dir` (CTRL+R) and select the label directory matching the images. If you selected correctly, labeled bounding boxes should appear.
 5. Manually correct the bounding boxes as you see fit.
 
 ### Yolo training
+Add yolo to your conda environment:
+```bash
+conda install -c conda-forge ultralytics
+```
 In the terminal of your choice run :
 ```bash
-yolo train data=<path/to/the/data.yaml> model=<model.pt> 
+yolo train data=</global/path/to/the/data.yaml> model=<model.pt> 
 ```
 >[!NOTE]  
-> Usually model=yolo11n.pt. 
+> By default model=yolo11n.pt.  
 > See the YOLO documentation for additionnal parameters & options for training.  
  
-The results will be given in the --- folder
+The results will be given in the /runs/detect/trainN/ folder, N being the training run's number.
 
 ### Yolo prediction
 Test your training by running a prediction on the yolo-dataset/images/test folder:  
 ```bash
 yolo predict model=</global/path/to/best.pt> source=<number of webcam or /path/to/dir> imgsz=<image_size>
+# the best.pt file can be found under /runs/detect/trainN/weights/best.pt
 ```
