@@ -38,7 +38,7 @@ from lang_sam import LangSAM
 # Gloabal variables
 # ==============================================================================
 
-N_IMG_ADDED = 3  # number of images generated for one original image
+N_IMG_ADDED = 1  # number of images generated for one original image
 PROMPT = "L-shaped metal extrusion." # prompt for the object to be searched in the dataset
 
 # ==============================================================================
@@ -324,10 +324,11 @@ def main():
 
     parser.add_argument('-a','--annotate', help= 'Annotates automatically the images using SAM',action="store_true")
     parser.add_argument("-f",'--folder', help= 'Source folder')
-
     args = parser.parse_args()
     # ==========================================================================
 
+    PROMPT = input("Prompt used to search the objetc :")  + "."
+    print(PROMPT)
     input_files_dir = args.folder
     assert os.path.exists(input_files_dir)
 
