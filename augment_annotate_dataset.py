@@ -39,8 +39,8 @@ from lang_sam import LangSAM
 # ==============================================================================
 
 N_IMG_ADDED = 1  # number of images generated for one original image
-PROMPT = "L-shaped metal extrusion." # prompt for the object to be searched in the dataset
-
+PROMPT = "square metal pannel with four holes" # prompt for the object to be searched in the dataset (detailled)
+LABEL = "metal-ceiling" # label used for the bounding boxes (shorter)
 # ==============================================================================
 
 
@@ -206,7 +206,7 @@ def annotate_images(labels_folder_path, img_folder_path):
             # classes.txt file (used for rectifying labels with labelImg)
             classes_file_path = destination_folder + "/" + "classes.txt"
             classes_file = open(classes_file_path, "w+")
-            classes_file.write(PROMPT)
+            classes_file.write(LABEL)
             classes_file.close()
 
             for f in files :
@@ -240,7 +240,7 @@ def annotate_images(labels_folder_path, img_folder_path):
                 # print("Found " + str(len(labels)) + " objects: " + str(results["scores"]) ) #! debug
 
                 if len(labels) == 0 :
-                    print("No " + str(PROMPT) + " was found, take another picture.")
+                    print("No " + str(PROMPT) + " was found.")
 
                 else :
                 
@@ -327,8 +327,8 @@ def main():
     args = parser.parse_args()
     # ==========================================================================
 
-    PROMPT = input("Prompt used to search the objetc :")  + "."
-    print(PROMPT)
+    PROMPT = input("Prompt used to search the object :")  + "."
+    # print(PROMPT)
     input_files_dir = args.folder
     assert os.path.exists(input_files_dir)
 
@@ -348,13 +348,13 @@ def main():
     # classes.txt file
     classes_file_path = dataset_dir + "/" + "classes.txt"
     classes_file = open(classes_file_path, "w+")
-    classes_file.write(PROMPT)
+    classes_file.write(LABEL)
     classes_file.close()
 
     # yaml file
     yaml_file_path = dataset_dir + "/" + "data.yaml"
     yaml_file = open(yaml_file_path, "w+")
-    yaml_file.write("train: images/train\nval: images/val\n\nnames:\n    0: " + PROMPT)
+    yaml_file.write("train: images/train\nval: images/val\n\nnames:\n    0: " + LABEL)
     yaml_file.close()
 
     if args.annotate :
