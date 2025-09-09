@@ -1,6 +1,6 @@
 <table>
   <tr>
-    <td><img src="readme-ressources/1e8e6e0ce5_a.jpg" alt="RACCOON!!" width="150"></td>
+    <td><img src="readme-ressources/04fc098c77_a.jpg" alt="RACCOON!!" width="170"></td>
     <td><h1>Yolo dataset creation tool</h1></td>
   </tr>
 </table>
