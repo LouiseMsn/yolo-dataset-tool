@@ -38,15 +38,15 @@ from lang_sam import LangSAM
 # Gloabal variables
 # ==============================================================================
 
-N_IMG_ADDED = 1  # number of images generated for one original image
-PROMPT = "square metal pannel with four holes" # prompt for the object to be searched in the dataset (detailled)
-LABEL = "metal-ceiling" # label used for the bounding boxes (shorter)
+# N_IMG_ADDED = 2  # number of images generated for one original image
+# PROMPT = "truncated black and white pyramid" # prompt for the object to be searched in the dataset (detailled)
+LABEL = "bar-holder" # label used for the bounding boxes (shorter)
 # ==============================================================================
 
 
 
 
-def augment_dataset(source_dir, img_folder_path):
+def augment_dataset(source_dir, img_folder_path,n_img_added):
     """
         Augments the dataset by creating N_IMG_ADDED for each base image by rotating, adding noise & changing brightness randomly. This will result in N_input_images*(1 + N_IMG_ADDED).
 
@@ -86,7 +86,7 @@ def augment_dataset(source_dir, img_folder_path):
 
         im.save(img_folder_path + "/" +  filename.removesuffix(type_suffix)  + '.png' )  # save original image in the new folder as a PNG
 
-        for i in range(0,N_IMG_ADDED):
+        for i in range(0,n_img_added):
             index = i
             im_new=im.copy()
            
@@ -159,7 +159,7 @@ def distribute_imgs(img_folder_path):
         filename = os.fsdecode(f)
         os.rename(img_folder_path + "/" + filename, train_folder_path + "/" + filename)
 
-def annotate_images(labels_folder_path, img_folder_path):
+def annotate_images(labels_folder_path, img_folder_path, prompt):
     """
         Annotates the images using SAM
           
@@ -234,13 +234,13 @@ def annotate_images(labels_folder_path, img_folder_path):
                 img_width, img_height = image_pil.size
                 
    
-                results = model.predict([image_pil], [PROMPT])[0]
+                results = model.predict([image_pil], [prompt])[0]
                 labels = results['labels']
 
                 # print("Found " + str(len(labels)) + " objects: " + str(results["scores"]) ) #! debug
 
                 if len(labels) == 0 :
-                    print("No " + str(PROMPT) + " was found.")
+                    print("No " + str(prompt) + " was found.")
 
                 else :
                 
@@ -266,7 +266,7 @@ def annotate_images(labels_folder_path, img_folder_path):
                     bbox_x = x2 - bbox_width/2
                     bbox_y = y2 - bbox_height/2
 
-                    bbox ="0 "+ str(bbox_x) + " " + str(bbox_y) + " " + str(bbox_width) + " " + str(bbox_height)
+                    bbox ="1 "+ str(bbox_x) + " " + str(bbox_y) + " " + str(bbox_width) + " " + str(bbox_height)
 
                     save_annoted_image(image_path, filename, annoted_img_path,  bbox_x, bbox_y, bbox_width, bbox_height, results["scores"][highest_score_index])
                     
@@ -327,11 +327,12 @@ def main():
     args = parser.parse_args()
     # ==========================================================================
 
-    PROMPT = input("Prompt used to search the object :")  + "."
+    prompt = input("Prompt used to search the object :")  + "."
     # print(PROMPT)
     input_files_dir = args.folder
     assert os.path.exists(input_files_dir)
-
+    
+    n_img_added = int(input("Number of images to add to the dataset (N generated for 1 picture), N:="))
 
     if input_files_dir[-1] == "/":
         input_files_dir = input_files_dir.removesuffix("/") # python 3.9+
@@ -340,7 +341,7 @@ def main():
     img_folder_path = dataset_dir + "/images"
     labels_folder_path = dataset_dir + "/labels"
 
-    ret = augment_dataset(input_files_dir, img_folder_path)
+    ret = augment_dataset(input_files_dir, img_folder_path, n_img_added)
 
     if ret :
         distribute_imgs(img_folder_path)
@@ -358,7 +359,7 @@ def main():
     yaml_file.close()
 
     if args.annotate :
-        annotate_images(labels_folder_path, img_folder_path)
+        annotate_images(labels_folder_path, img_folder_path, prompt)
 
     print("Finished operations")
 
