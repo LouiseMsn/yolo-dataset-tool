@@ -38,9 +38,11 @@ pip install -U git+https://github.com/luca-medeiros/lang-segment-anything.git
  ---
 ## Usage
 ### Dataset augmentation & annotation
-In `augment_annotate_dataset.py` change the value of :
- `PROMPT` : prompt given to SAM during auto annotation, if possible make it as detailled as you can
- `LABEL` : label assigned to the yolo bounding box, usually shorter
+After launching the script you will be asked to give :
+1. A prompt that will be given to SAM during auto annotation, describe the object to be searched and make it as detailled as you can (shape, color, particularities etc)
+2. The label assigned to the yolo bounding box, usually shorter
+3. The number of images that will be generated for each original image.
+
 Run
 ```bash
 python augment_annotate_dataset.py -f <path/to/your/images> -a

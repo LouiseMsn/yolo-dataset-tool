@@ -1,6 +1,5 @@
 import numpy as np
 from PIL import Image, ImageEnhance
-import sys
 import os
 import random
 import shutil
@@ -33,18 +32,6 @@ from lang_sam import LangSAM
             val
         test-data
 '''
-
-# ==============================================================================
-# Gloabal variables
-# ==============================================================================
-
-# N_IMG_ADDED = 2  # number of images generated for one original image
-# PROMPT = "truncated black and white pyramid" # prompt for the object to be searched in the dataset (detailled)
-LABEL = "bar-holder" # label used for the bounding boxes (shorter)
-# ==============================================================================
-
-
-
 
 def augment_dataset(source_dir, img_folder_path,n_img_added):
     """
@@ -159,7 +146,7 @@ def distribute_imgs(img_folder_path):
         filename = os.fsdecode(f)
         os.rename(img_folder_path + "/" + filename, train_folder_path + "/" + filename)
 
-def annotate_images(labels_folder_path, img_folder_path, prompt):
+def annotate_images(labels_folder_path, img_folder_path, prompt, label):
     """
         Annotates the images using SAM
           
@@ -206,7 +193,7 @@ def annotate_images(labels_folder_path, img_folder_path, prompt):
             # classes.txt file (used for rectifying labels with labelImg)
             classes_file_path = destination_folder + "/" + "classes.txt"
             classes_file = open(classes_file_path, "w+")
-            classes_file.write(LABEL)
+            classes_file.write(label)
             classes_file.close()
 
             for f in files :
@@ -273,8 +260,7 @@ def annotate_images(labels_folder_path, img_folder_path, prompt):
                     label_file_path = destination_folder + "/" + filename + ".txt"
                     label_file = open(label_file_path, "w+")
                     label_file.write(bbox)
-                    label_file.close()
-                                   
+                    label_file.close()                    
     return 0
 
 def remove_suffix(input_string, suffix):
@@ -327,8 +313,8 @@ def main():
     args = parser.parse_args()
     # ==========================================================================
 
-    prompt = input("Prompt used to search the object :")  + "."
-    # print(PROMPT)
+    prompt = input("Prompt used to search the object (detailled) :")  + "."
+    label = input("Label used for the yolo detection box (shortest possible):")
     input_files_dir = args.folder
     assert os.path.exists(input_files_dir)
     
@@ -349,17 +335,17 @@ def main():
     # classes.txt file
     classes_file_path = dataset_dir + "/" + "classes.txt"
     classes_file = open(classes_file_path, "w+")
-    classes_file.write(LABEL)
+    classes_file.write(label)
     classes_file.close()
 
     # yaml file
     yaml_file_path = dataset_dir + "/" + "data.yaml"
     yaml_file = open(yaml_file_path, "w+")
-    yaml_file.write("train: images/train\nval: images/val\n\nnames:\n    0: " + LABEL)
+    yaml_file.write("train: images/train\nval: images/val\n\nnames:\n    0: " + label)
     yaml_file.close()
 
     if args.annotate :
-        annotate_images(labels_folder_path, img_folder_path, prompt)
+        annotate_images(labels_folder_path, img_folder_path, prompt, label)
 
     print("Finished operations")
 
