@@ -1,4 +1,10 @@
-# Yolo dataset creation tool
+<table>
+  <tr>
+    <td><img src="readme-ressources/1e8e6e0ce5_a.jpg" alt="RACCOON!!" width="150"></td>
+    <td><h1>Yolo dataset creation tool</h1></td>
+  </tr>
+</table>
+
 Creates a training dataset conforming to YOLO folder organisation and annotation format. Given a folder of images it will:
 1. Generate N images of this image with random rotation, noise and brightness.
 2. Dispatch these images into 3 folders: "train", "val" and "test".
